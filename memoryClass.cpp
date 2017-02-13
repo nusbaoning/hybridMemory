@@ -47,15 +47,35 @@ using namespace std;
 // }
 
 page_descriptor * MemoryDevice::find_get_page(unsigned long inode, unsigned long index) {
-	if (pageCache.find(inode) == mymap.end())
+	hash_map<unsigned long, page_descriptor> inodeMap;
+	if (pageCacheDirty.find(inode) != pageCacheDirty.end())
+		inodeMap = pageCacheDirty[inode];
+	else if(pageCacheClean.find(inode) != pageCacheClean.end())
+		inodeMap = pageCacheClean[inode];
+	else
 		return NULL;
-	
+	if (inodeMap.find(index) == inodeMap.end())
+	{
+		return NULL; 
+	}
+	return &inodeMap[index];
+}
 
+
+page_descriptor * MemoryDevice::add_to_page_cache(unsigned long inode, unsigned long index, 
+	bool dirty, unsigned long time) {
+	if (allocatedPageNumber < size)
+	{
+		allocatedPageNumber++;
+	}
+	return NULL;
 }
 
 int main() {
 	MemoryDevice m(500);
-	m.show_page_cache_size();
+	m.show_page_cache_statics();
+	m.add_to_page_cache(0, 0, true, 0);
+	m.show_page_cache_statics();
 }
 
 
