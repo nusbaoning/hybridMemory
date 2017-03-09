@@ -19,6 +19,8 @@ private:
 	doublePageHashMap pageCacheClean;
 	unsigned int size;
 	unsigned int allocatedPageNumber;
+	unsigned double hitTime;
+	unsigned double energy;
 
 public:
 	MemoryDevice(unsigned int s) {
@@ -85,7 +87,11 @@ public:
 	*/
 	void set_page_dirty(page_descriptor * page, bool dirty, unsigned long mytime);
 
-	virtual void shrink_cache();
+	virtual void shrink_cache() = 0;
+
+	virtual void read_request_metadata_management()=0;
+	virtual void write_request_metadata_management()=0;
+	virtual void write_back_check()=0;
 
 };
 
