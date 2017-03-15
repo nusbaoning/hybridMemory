@@ -1,5 +1,9 @@
 #include "memoryClass.h"
 
+##ifndef DISK_UPDATE
+#define DISK_UPDATE 500
+#endif
+
 struct MemoryController
 {
 private:
@@ -12,11 +16,17 @@ public:
 		dev2 = d2;
 	}
 
-	unsigned double request_access(unsigned long inode, unsigned long index);
+	unsigned long request_access(unsigned long inode, unsigned long index);
 
-	unsigned double move(MemoryDevice des, MemoryDevice src, page_descriptor * p) {		
+	unsigned long move(MemoryDevice des, MemoryDevice src, page_descriptor * p) {		
 		des.add_to_page_cache(p->inode, p->index, p->dirty, p->mytime);
 		src.remove_from_page_cache(p);		
+		return 0;
 	}	
+
+	unsigned long evict(MemoryDevice* src, page_descriptor *p) {
+		src->remove_from_page_cache(p);
+		return DISK_UPDATE;
+	}
 };
 

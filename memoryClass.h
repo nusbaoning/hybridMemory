@@ -89,8 +89,8 @@ public:
 
 	virtual void shrink_cache() = 0;
 
-	virtual void read_request_metadata_management()=0;
-	virtual void write_request_metadata_management()=0;
+	virtual void request_metadata_management(bool type)=0;
+	
 	virtual void write_back_check()=0;
 
 };
