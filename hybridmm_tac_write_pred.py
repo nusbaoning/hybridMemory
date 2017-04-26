@@ -127,7 +127,8 @@ def get_sorted_list():
 	l = []
 	for k,v in page.items():
 		l.append((k,v)) 	
-	l.sort(key=itemgetter(1), reverse=True)
+	# l.sort(key=itemgetter(1), reverse=True)
+	l.sort(key=itemgetter(1))
 	return l
 		
 
@@ -147,9 +148,11 @@ def compare_two_list_core(l1, req, d):
 	i = 0
 	for item in l1:
 		page, _ = item
-		if page in d:
+		if page not in d:
+			i += 1
+		else:
 			reqPage = d[page]
-			if reqPage >= req:
+			if reqPage <= req:
 				i += 1
 	return round(i/len(l1)*100, 2)
 
@@ -185,7 +188,7 @@ f = open("result.log", "a")
 # page = {(1,1):1, (1,2):2, (1,3):8, (1,4):9,
 # (1,5):3, (1,7):2, (1,6):2, (1,8):3, (1,9):20, (1,10):42}
 fn = "nd_filebench5"
-print(["*"]*20, file=f)
+print("****************************************************", file=f)
 load_file(fn, PartitionType.nrreq)
 f.close()
 print(totalWriteReq)
